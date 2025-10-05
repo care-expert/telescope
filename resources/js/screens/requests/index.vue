@@ -11,15 +11,28 @@ export default {
 <template>
     <index-screen title="Requests" resource="requests">
         <tr slot="table-header">
+            <th scope="col">Time</th>
+            <th scope="col">Host</th>
             <th scope="col">Verb</th>
             <th scope="col">Path</th>
             <th scope="col" class="text-center">Status</th>
             <th scope="col" class="text-right">Duration</th>
-            <th scope="col">Happened</th>
             <th scope="col"></th>
         </tr>
 
         <template slot="row" slot-scope="slotProps">
+
+            <td
+                class="table-fit text-muted"
+                :title="slotProps.entry.created_at"
+            >
+                {{ slotProps.entry.created_at }}
+            </td>
+
+            <td :title="slotProps.entry.content.hostname">
+                {{ truncate(slotProps.entry.content.hostname, 30) }}
+            </td>
+
             <td class="table-fit pr-0">
                 <span class="badge" :class="'badge-' + requestMethodClass(slotProps.entry.content.method)">
                     {{ slotProps.entry.content.method }}
@@ -39,14 +52,6 @@ export default {
             <td class="table-fit text-right text-muted">
                 <span v-if="slotProps.entry.content.duration">{{ slotProps.entry.content.duration }}ms</span>
                 <span v-else>-</span>
-            </td>
-
-            <td
-                class="table-fit text-muted"
-                :data-timeago="slotProps.entry.created_at"
-                :title="slotProps.entry.created_at"
-            >
-                {{ timeAgo(slotProps.entry.created_at) }}
             </td>
 
             <td class="table-fit">
